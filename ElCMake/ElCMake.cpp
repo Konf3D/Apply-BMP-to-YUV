@@ -9,14 +9,7 @@ using namespace std;
 int main()
 {
 	std::fstream myfile;
-
 	myfile.open("test.bmp", std::fstream::in | std::fstream::binary);
-
-	if (!myfile.good())
-	{
-		myfile.close();
-		return 0;
-	}
 
 	// BMP read sequence
 	PIXELBITMAP24 bmp;

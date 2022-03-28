@@ -42,7 +42,4 @@ struct YUVMAP
 	uint32_t height = 0;
 };
 
-void VMirrorFrame(std::vector<uint8_t>& res, uint32_t width, uint32_t height);
-void HVMirrorFrame(std::vector<uint8_t>& res);
-static void CorrectBitMap(PIXELBITMAP24& bmp);
 bool FetchBitMap(std::fstream& file, PIXELBITMAP24& bmp);

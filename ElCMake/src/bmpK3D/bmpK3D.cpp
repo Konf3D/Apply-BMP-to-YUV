@@ -1,13 +1,13 @@
 #include "bmpK3D.h"
 
-void VMirrorFrame(std::vector<uint8_t>& res, uint32_t width, uint32_t height)
+static void VMirrorFrame(std::vector<uint8_t>& res, uint32_t width, uint32_t height)
 {
 	for (uint32_t i = 0; i < height; i++)
 	{
 		std::reverse(res.begin() + i * width, res.begin() + (i + 1) * width);
 	}
 }
-void HVMirrorFrame(std::vector<uint8_t>& res)
+static void HVMirrorFrame(std::vector<uint8_t>& res)
 {
 	std::reverse(res.begin(), res.end());
 }
