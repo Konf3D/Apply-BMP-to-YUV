@@ -22,16 +22,17 @@ int main()
 	PIXELBITMAP24 bmp;
 	FetchBitMap(myfile, bmp);
 	myfile.close();
+
+
 	// Convertion sequence
 	YUVMAP yuvFromBMP;
 	RGB2YUV(std::move(bmp), yuvFromBMP); //convert RGB888 -> YUV444, bmp not needed after
 	YUV_444_to_420(yuvFromBMP); // convert YUV444 -> YUV420
 
-
-	myfile.open("out.yuv", std::fstream::binary | std::fstream::in | std::fstream::out); //864x480 yuv with 332 frames vs 224x224 bmp
-	ImprintBMP2YUV(myfile, 864, 480, yuvFromBMP, 124, 124);
+	// Apply pic seq.
+	myfile.open("out.yuv", std::fstream::binary | std::fstream::in | std::fstream::out);
+	ImprintBMP2YUV(myfile, 864, 480, yuvFromBMP, 124, 124,1,150);
 	myfile.close();
-
 
 	return 0;
 }

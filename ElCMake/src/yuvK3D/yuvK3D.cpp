@@ -89,14 +89,17 @@ bool YUV_444_to_420(YUVMAP& yuvFrame)
 	return true;
 }
 
-bool ImprintBMP2YUV(std::fstream& video, uint32_t vWidth, uint32_t vHeight, YUVMAP& yuvFrame, uint32_t widthOffset, uint32_t heightOffset)
+bool ImprintBMP2YUV(std::fstream& video, uint32_t vWidth, uint32_t vHeight, YUVMAP& yuvFrame, uint32_t widthOffset, uint32_t heightOffset, uint32_t startFrameNumber, uint32_t maxFramesNumber)
 {
+	if (widthOffset + yuvFrame.width > vWidth)
+		return false;
+	if (heightOffset + yuvFrame.height > vHeight)
+		return false;
+
 	uint32_t frameNumber = 0;
 	video.seekp(heightOffset * vWidth + widthOffset, std::fstream::beg);
-	while (!video.eof())
+	while (frameNumber < maxFramesNumber)
 	{
-		if (frameNumber > 331)
-			break;
 		for (uint32_t i = 0; i < yuvFrame.height; i++)
 		{
 			for (uint32_t j = 0; j < yuvFrame.width; j++)
@@ -105,8 +108,7 @@ bool ImprintBMP2YUV(std::fstream& video, uint32_t vWidth, uint32_t vHeight, YUVM
 			}
 			video.seekp(vWidth - yuvFrame.width, std::fstream::cur);
 		}
-		video.seekp(vWidth * vHeight * frameNumber / 2 * 3 + vWidth * vHeight, std::fstream::beg);
-		video.seekp((heightOffset * vWidth / 2 + widthOffset) / 2, std::fstream::cur);
+		video.seekp(vWidth * vHeight * frameNumber / 2 * 3 + vWidth * vHeight + (heightOffset * vWidth / 2 + widthOffset) / 2, std::fstream::beg);
 		for (uint32_t i = 0; i < yuvFrame.height / 2; i++)
 		{
 			for (uint32_t j = 0; j < yuvFrame.width / 2; j++)
@@ -115,8 +117,7 @@ bool ImprintBMP2YUV(std::fstream& video, uint32_t vWidth, uint32_t vHeight, YUVM
 			}
 			video.seekp((vWidth - yuvFrame.width) / 2, std::fstream::cur);
 		}
-		video.seekp(vWidth * vHeight * frameNumber / 2 * 3 + vWidth * vHeight * 5 / 4, std::fstream::beg);
-		video.seekp((heightOffset * vWidth / 2 + widthOffset) / 2, std::fstream::cur);
+		video.seekp(vWidth * vHeight * frameNumber / 2 * 3 + vWidth * vHeight * 5 / 4 + (heightOffset * vWidth / 2 + widthOffset) / 2, std::fstream::beg);
 		for (uint32_t i = 0; i < yuvFrame.height / 2; i++)
 		{
 			for (uint32_t j = 0; j < yuvFrame.width / 2; j++)
@@ -126,8 +127,7 @@ bool ImprintBMP2YUV(std::fstream& video, uint32_t vWidth, uint32_t vHeight, YUVM
 			video.seekp((vWidth - yuvFrame.width) / 2, std::fstream::cur);
 		}
 		frameNumber++;
-		video.seekp(vWidth * vHeight * frameNumber / 2 * 3, std::fstream::beg);
-		video.seekp(heightOffset * vWidth + widthOffset, std::fstream::cur);
+		video.seekp(vWidth * vHeight * frameNumber / 2 * 3 + heightOffset * vWidth + widthOffset, std::fstream::beg);
 	}
 	return true;
 }
